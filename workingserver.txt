@@ -1,0 +1,87 @@
+import "reflect-metadata";
+import { MikroORM } from "@mikro-orm/core";
+// import { Post } from "./entities/Post";
+import mikroOrmConfig from "./mikro-orm.config";
+import { ApolloServer } from "apollo-server-express";
+import { buildSchema } from "type-graphql";
+import express from "express";
+import { HelloResolver } from "./resolvers";
+import { PostResolver } from "./resolvers/Post";
+import { UserResolver } from "./resolvers/User";
+//import * as Redis from "redis";
+import session from "express-session";
+
+//import connectRedis from "connect-redis";
+import cors from "cors";
+import { __prod__ } from "./constants";
+import { MyContext } from "./types";
+
+const main = async () => {
+  const Orm = await MikroORM.init(mikroOrmConfig);
+  await Orm.getMigrator().up();
+  const app = express();
+
+  app.set("trust proxy", 1);
+
+  app.use(
+    cors({
+      credentials: true,
+      origin: [
+        "http://localhost:4000/graphql",
+        "https://studio.apollographql.com",
+      ],
+    })
+  );
+  //  const RedisStore = connectRedis(session);
+
+  app.use(
+    session({
+      name: "oneWar",
+      saveUninitialized: false,
+      secret: "process.env.SESSION_SECRET",
+      resave: false,
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
+        sameSite: "none", // csrf
+        secure: true,
+        httpOnly: true,
+      },
+    })
+  );
+
+  const port = 4000;
+
+  app.get("/", (_, res) => res.send("hello"));
+
+  const apolloServer = new ApolloServer({
+    schema: await buildSchema({
+      //buildSchema is a promise that returns a graphql schema
+      resolvers: [HelloResolver, PostResolver, UserResolver],
+      validate: false, //disable graphql schema validation
+    }),
+    context: ({ req, res }): MyContext => ({ em: Orm.em, req, res }), //passing em to context which makes the resolvers to access it
+  });
+
+  await apolloServer.start();
+
+  apolloServer.applyMiddleware({
+    app,
+    cors: {
+      origin: ["http://localhost:4000", "https://studio.apollographql.com"],
+      credentials: true,
+    },
+  });
+
+  app.listen(port, () => console.log(`Server listening on port ${port}`));
+
+  //   const posted = Orm.em.create(Post, {title: "Hsellqo", createdAt: new Date(), updatedAt: new Date(),id:1102});
+  //   await Orm.em.persistAndFlush(posted);
+  //    const posts = await Orm.em.find(Post, {});
+  //     console.log(posts);
+};
+
+main().catch((err) => {
+  console.error(err);
+});
+
+//last

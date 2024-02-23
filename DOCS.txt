@@ -1,0 +1,141 @@
+OTHER_URLS:{
+https://stackoverflow.com/questions/65980722/how-to-set-connect-redis-in-typescript
+https://medium.com/swlh/how-the-new-chrome-80-cookie-rule-samesite-none-secure-affects-web-development-c06380220ced
+https://www.freecodecamp.org/news/how-to-get-https-working-on-your-local-development-environment-in-5-minutes-7af615770eec/
+https://github.com/apollographql/apollo-server/issues/5775
+https://github.com/pyDjangoDev/apollo-express-typeorm-blog/compare/main...ThalesMarzarotto:patch-2
+}
+
+Code: https://github.com/benawad/lireddit
+
+Links from video:
+ACTUAL VIDEO :https://www.youtube.com/watch?v=I6ypD7qv3Z8
+
+Learn vim: https://benawad.com/vim
+How to install PostgreSQL: https://www.google.com/search?q=how+to+install+postgresql
+How to install Redis: https://www.google.com/search?q=how+to+install+redis
+NEXTJS WITH CHAKRAUI: https://github.com/vercel/next.js/tree/canary/examples/with-chakra-ui 
+Argon2 vs bcrypt: https://security.stackexchange.com/questions/193351/in-2018-what-is-the-recommended-hash-to-store-passwords-bcrypt-scrypt-argon2
+React snippets: https://gist.github.com/benawad/1e9dd01994f78489306fbfd6f7b01cd3#file-snippets-typescriptreact-json
+Simple pagination: https://github.com/FormidableLabs/urql/blob/main/exchanges/graphcache/src/extras/simplePagination.ts
+Node.js Docker: https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
+Next Apollo: https://github.com/adamsoffer/next-apollo/blob/master/src/withApollo.js
+
+GRAPHQL TYPES GENERATOR FOR FRONTEND : https://www.the-guild.dev/graphql/codegen/docs/getting-started/installation
+
+DOCS:
+
+https://github.com/benawad/lireddit/blob/master/server/tsconfig.json
+https://mikro-orm.io/docs/migrations#using-via-cli
+https://github.com/tj/connect-redis 
+ 
+"scripts": {
+    "start": "node dist/index.js",
+    "start2": "ts-node src/index.ts",//this just runs the code but not converts to JS	
+"create:migration": "mikro-orm migration:create"//creates the migration folder
+    "watch": "tsc -w" //converts ts files to js files
+  },
+
+package.json:
+"mikro-orm": {//must required for mikro-orm cli
+    "useTsNode": true,
+    "configPaths": [
+      "./src/mikro-orm.config.ts",
+      "./dist/mikro-orm.config.js"
+    ]
+  }
+
+commands:
+1.)yarn add -D @types/node typescript
+2.)yarn add -D ts-node
+3.)npx tsconfig.json//creates ts config file
+4.)yarn watch//creates the js files
+5.)yarn add -D nodemon
+6.)yarn add @mikro-orm/cli @mikro-orm/core @mikro-orm/migrations @mikro-orm/postgresql pg
+7.) npx mikro-orm migration:create//for migrations to start
+8.) yarn add express apollo-server-express graphql type-graphql
+9.) yarn add -D @types/express
+10.)yarn add argon2//for decrypting passwords
+11.)yarn add redis connect-redis express-session
+12.)yarn add -D @types/redis @types/express-session @types/connect-redis
+13.)npm i nodemailer
+14.)npm i uuid ioredis[connect-redis gonna be depreciated]
+15.)npm i -D @types/uuid @types/ioredis	
+16.)npm i typeorm
+
+
+FRONTEND:
+1.)yarn add formik
+2.)yarn add urql graphql
+3.)yarn add -D @graphql-codegen/cli // for genrating schema Types
+4.)yarn graphql-code-generator init	
+	1.)src/graphql/**/*.graphql//for where is your schema
+	2.)src/generated/graphql.tsx//for where to write the output
+	3.)codegen.yml//for name the config file
+	4.)gen//for what script in package.json shoud run the codegen
+5.)yarn add -D @graphql-codegen/typescript-urql
+6.)yarn add @urql/exchange-graphcache//used to reset the graphql cache data //https://formidable.com/open-source/urql/docs/graphcache/
+7.) npm install --save next-urql react-is urql graphql
+
+
+Graphql QUERIES: 
+
+get all posts: 
+query  {
+  posts {
+    id
+    title
+  }
+}
+
+get Post by Id : 
+
+query ($uniId: Int!) {
+  post(uniId: $uniId) {
+    id
+    title
+  }
+}
+
+create post :
+
+mutation {
+  createPost(title: "28 th october") {
+    id
+    title
+    createdAt
+    updatedAt    
+  }
+}
+
+update a post : 
+
+mutation{
+  updatePost(id:1,title: "ok google") {
+    title,
+    id
+  }
+}
+
+delete post:
+
+mutation{
+  deletePost(id:2)
+}
+
+ADDITIONAL NOTES:
+
+control+p for search files
+control+spacebar for TS suggestions
+
+VS-CODE-EXTENSIONS-USED : 
+
+bracket pair colorizer 2
+
+Docker
+
+GraphQL for VSCode
+
+prettier-code formatter
+
+vim?
